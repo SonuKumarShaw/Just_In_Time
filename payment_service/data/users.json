@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1766758125178",
+    "username": "XYZ",
+    "email": "xyz@example.com",
+    "subscriptionPlan": "pro",
+    "subscriptionStatus": "pending",
+    "trialStartDate": "2025-12-27T08:50:47.448Z",
+    "trialEndDate": "2026-01-26T08:43:12.640Z",
+    "autoPayment": true,
+    "createdAt": "2025-12-26T14:08:45.178Z",
+    "updatedAt": "2025-12-27T08:50:47.449Z"
+  }
+]
