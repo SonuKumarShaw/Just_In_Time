@@ -1,0 +1,52 @@
+{
+  "script_fragments": [
+    {
+      "id": 1,
+      "name": "Global Variables",
+      "description": "Initialization of global variables used across the script",
+      "code": "var timeout;"
+    },
+    {
+      "id": 2,
+      "name": "Locomotive Scroll Initialization",
+      "description": "Sets up smooth scrolling effect using LocomotiveScroll library on the main element",
+      "code": "const scroll = new LocomotiveScroll({\n  el: document.querySelector(\"#main\"),\n  smooth: true,\n});"
+    },
+    {
+      "id": 3,
+      "name": "First Page Animation",
+      "description": "Animates the hero section on page load using GSAP timeline with sequential animations for nav, text elements, and footer",
+      "code": "function firstPageAnim() {\n  var tl = gsap.timeline();\n\n  tl.from(\"#nav\", {\n    y: \"-10\",\n    opacity: 0,\n    duration: 1.5,\n    ease: \"expo.inOut\",\n  })\n    .to(\".boundingelem\", {\n      y: 0,\n      ease: \"expo.inOut\",\n      duration: 2,\n      delay: -1,\n      stagger: 0.2,\n    })\n    .from(\"#herofooter\", {\n      y: -10,\n      opacity: 0,\n      duration: 1.5,\n      delay: -1,\n      ease: \"expo.inOut\",\n    });\n}"
+    },
+    {
+      "id": 4,
+      "name": "Circle Mouse Follower Setup",
+      "description": "Initializes mouse tracking variables and sets up mousemove event listener for circle scaling effect based on mouse velocity",
+      "code": "function circleChaptaKaro() {\n  var xscale = 1;\n  var yscale = 1;\n\n  var xprev = 0;\n  var yprev = 0;\n\n  window.addEventListener(\"mousemove\", function (dets) {\n    clearTimeout(timeout);\n\n    xscale = gsap.utils.clamp(0.8, 1.2, dets.clientX - xprev);\n    yscale = gsap.utils.clamp(0.8, 1.2, dets.clientY - yprev);\n\n    xprev = dets.clientX;\n    yprev = dets.clientY;\n\n    circleMouseFollower(xscale, yscale);\n\n    timeout = setTimeout(function () {\n      document.querySelector(\"#minicircle\").style.transform = `translate(${dets.clientX}px, ${dets.clientY}px) scale(1, 1)`;\n    }, 100);\n  });\n}"
+    },
+    {
+      "id": 5,
+      "name": "Circle Mouse Follower Animation",
+      "description": "Animates the mini circle element to follow the mouse cursor with dynamic scaling based on velocity",
+      "code": "function circleMouseFollower(xscale, yscale) {\n  window.addEventListener(\"mousemove\", function (dets) {\n    document.querySelector(\"#minicircle\").style.transform = `translate(${dets.clientX}px, ${dets.clientY}px) scale(${xscale}, ${yscale})`;\n  });\n}"
+    },
+    {
+      "id": 6,
+      "name": "Portfolio Element Hover Effects",
+      "description": "Handles image reveal and rotation effects on portfolio elements when mouse moves over them",
+      "code": "document.querySelectorAll(\".elem\").forEach(function (elem) {\n  var rotate = 0;\n  var diffrot = 0;\n\n  elem.addEventListener(\"mouseleave\", function () {\n    gsap.to(elem.querySelector(\"img\"), {\n      opacity: 0,\n      ease: \"power3.out\",\n      duration: 0.5,\n    });\n  });\n\n  elem.addEventListener(\"mousemove\", function (dets) {\n    var rect = elem.getBoundingClientRect();\n    var diff = dets.clientY - rect.top;\n    diffrot = dets.clientX - rotate;\n    rotate = dets.clientX;\n    gsap.to(elem.querySelector(\"img\"), {\n      opacity: 1,\n      ease: \"power3.out\",\n      top: diff,\n      left: dets.clientX - rect.left,\n      rotate: gsap.utils.clamp(-20, 20, diffrot * 0.5),\n    });\n  });\n});"
+    },
+    {
+      "id": 7,
+      "name": "Animation Initialization",
+      "description": "Calls the animation setup functions to initialize all effects on page load",
+      "code": "firstPageAnim();\ncircleChaptaKaro();"
+    },
+    {
+      "id": 8,
+      "name": "Footer Time Display",
+      "description": "Updates and displays the current time in EST format in the footer, refreshed every second",
+      "code": "function updateFooterTime() {\n    const now = new Date();\n    let hours = now.getHours();\n    const minutes = now.getMinutes();\n    const seconds = now.getSeconds();\n \n    const ampm = hours >= 12 ? 'PM' : 'AM';\n    hours = hours % 12;\n    hours = hours ? hours : 12; \n   \n    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;\n    const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;\n    \n    const timeString = `${hours}:${formattedMinutes} ${ampm} EST`;\n    \n    document.getElementById('current-time').textContent = timeString;\n  }\n  \n  updateFooterTime();\n\n  setInterval(updateFooterTime, 1000);"
+    }
+  ]
+}

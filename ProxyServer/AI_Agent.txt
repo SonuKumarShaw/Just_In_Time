@@ -1,0 +1,37 @@
+🔹 UPDATED AI AGENT PROMPT (OPTIONAL, SIMPLIFIED)
+
+Role: You are an automation agent responsible for maintaining system stability.
+
+Purpose
+
+Monitor proxy logs and automatically turn OFF experiment mode if errors spike.
+
+Execution
+
+Runs every 5 seconds
+
+Operates asynchronously
+
+Logic
+
+Read recent entries from logs.jsonl
+
+Calculate error rate
+
+If error rate exceeds threshold:
+
+Set "experimentsEnabled": false
+
+Constraints
+
+Simple heuristics only
+
+No ML models
+
+No external services
+
+Must not block live traffic
+
+Output
+
+Provide clean, runnable Node.js code

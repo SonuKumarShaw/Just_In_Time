@@ -1,0 +1,6 @@
+```json
+{
+  "pass": false,
+  "reason": "The code displays the local time and labels it as 'EST', not IST. It does not convert or display time in IST."
+}
+```

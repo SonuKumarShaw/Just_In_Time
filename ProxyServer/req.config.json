@@ -1,0 +1,93 @@
+{
+    "experimentsEnabled": false,
+    "globalThresholds": {
+        "errorRatePercent": 40,
+        "windowSeconds": 10
+    },
+    "routes": [
+        {
+            "id": "flask-static",
+            "match": {
+                "method": "GET",
+                "path": "/static"
+            },
+            "primary": {
+                "url": "http://127.0.0.1:5000"
+            },
+            "test": {
+                "url": "http://127.0.0.1:5000"
+            },
+            "failureConditions": {
+                "timeoutMs": 5000
+            }
+        },
+        {
+            "id": "flask-api",
+            "match": {
+                "method": "GET",
+                "path": "/api"
+            },
+            "primary": {
+                "url": "http://127.0.0.1:5000"
+            },
+            "test": {
+                "url": "http://127.0.0.1:5000"
+            },
+            "failureConditions": {
+                "timeoutMs": 5000
+            }
+        },
+        {
+            "id": "invoice-app",
+            "match": {
+                "method": "GET",
+                "path": "/invoice-system"
+            },
+            "primary": {
+                "url": "http://localhost:4001"
+            },
+            "test": {
+                "url": "http://localhost:4001"
+            },
+            "failureConditions": {
+                "statusCodes": [
+                    500,
+                    502,
+                    503,
+                    504
+                ],
+                "timeoutMs": 5000
+            }
+        },
+        {
+            "id": "route-1766842008426",
+            "match": {
+                "method": "GET",
+                "path": "/"
+            },
+            "experiment": {
+                "enabled": true,
+                "trafficSplit": {
+                    "primary": 50,
+                    "fallback": 50
+                }
+            },
+            "primary": {
+                "url": "https://portfolioayush11.netlify.app/"
+            },
+            "fallback": {
+                "url": "https://ayush1stportfolio.onrender.com/"
+            },
+            "failureConditions": {
+                "statusCodes": [
+                    500,
+                    502,
+                    503,
+                    504,
+                    404
+                ],
+                "timeoutMs": 30000
+            }
+        }
+    ]
+}

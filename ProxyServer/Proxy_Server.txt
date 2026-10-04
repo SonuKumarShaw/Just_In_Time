@@ -1,0 +1,155 @@
+🔹 UPDATED PROXY SERVER PROMPT (SIMPLIFIED)
+
+Role: You are a senior backend engineer.
+Task: Build a Node.js–based reverse proxy server for a hackathon SaaS system.
+
+Core Idea
+
+The proxy sits between the browser and backend APIs.
+It allows enabling or disabling an experiment mode that routes traffic either to:
+
+a primary backend, or
+
+a single test backend
+
+There is no traffic splitting.
+
+Requirements
+
+Use Node.js with Express or Fastify
+
+Do not use Nginx or Lua
+
+Act as a reverse proxy
+
+Preserve:
+
+HTTP method
+
+headers (including Authorization)
+
+body
+
+query parameters
+
+Routing Logic
+
+Read routing rules from req.config.json
+
+A global experiment toggle controls routing
+
+Behavior
+
+If experimentsEnabled = false
+→ route all traffic to the primary backend
+
+If experimentsEnabled = true
+→ route all matching traffic to the test backend
+
+No partial rollout
+
+No percentage-based routing
+
+Failure Handling
+
+Detect failures based on:
+
+HTTP status codes (5xx)
+
+request timeout
+
+Log failures
+
+Always return the backend response to the client
+
+Logging
+
+Log every request in JSON Lines format
+
+Log fields:
+
+request id
+
+timestamp
+
+request path
+
+routed backend (primary or test)
+
+response status
+
+latency
+
+error flag
+
+Write logs to logs.jsonl
+
+Dashboard APIs
+
+Provide APIs to:
+
+GET /dashboard/config → view current config
+
+POST /dashboard/config → toggle experiments on/off
+
+GET /dashboard/logs → view recent logs
+
+Constraints
+
+Single Node.js server
+
+JSON file storage only
+
+No database
+
+Hackathon-ready implementation
+
+Output
+
+Provide complete runnable code
+
+Keep code modular and readable
+
+Add comments explaining key decisions
+
+Non-Goals (Important)
+
+No traffic splitting
+
+No multi-backend selection
+
+No SDK-based interception
+
+No frontend code changes
+
+Focus on simplicity and correctness.
+
+🔹 UPDATED req.config.json (SIMPLIFIED)
+{
+  "experimentsEnabled": false,
+
+  "routes": [
+    {
+      "id": "sector-analytics",
+
+      "match": {
+        "method": "GET",
+        "path": "/sector-analytics"
+      },
+
+      "primary": {
+        "url": "https://api.primary-backend.com"
+      },
+
+      "test": {
+        "url": "https://api.test-backend.com"
+      },
+
+      "failureConditions": {
+        "statusCodes": [500, 502, 503, 504],
+        "timeoutMs": 2000
+      }
+    }
+  ]
+}
+
