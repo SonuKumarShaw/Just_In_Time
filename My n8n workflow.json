@@ -1,0 +1,184 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "evaluate-prompt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "62195ad1-bc3c-4524-9b7e-a9cae3b5bae6",
+      "name": "Webhook",
+      "webhookId": "a952ae11-8305-47c5-9258-3468f197c07e"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:4002/prompt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "73139326-04d3-4728-a227-6688b93a9605",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:4002/fragments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "8db41c27-d53a-4489-b11e-642aa4ac2dcd",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Evaluate the following code fragments based on these requirements. \n{{ $('HTTP Request').item.json.prompt }}\nCode fragments:\n{{ $json.script_fragments[7].code }}\nRespond with a valid JSON object { \"pass\": boolean, \"reason\": \"very short summary\" }. Requirements:",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "="
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.8,
+      "position": [
+        592,
+        0
+      ],
+      "id": "ce352f52-2728-4ae3-a169-c7ec19500d44",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        624,
+        144
+      ],
+      "id": "474319eb-ae91-46c4-94b5-5af844ec8a60",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "jAiNSOZK5s56p6cV",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:4002/result",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "result",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        944,
+        0
+      ],
+      "id": "82a61ef5-4822-41a5-89f3-d0948b151fdf",
+      "name": "HTTP Request2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "c80f65c6-2ac6-47d5-ba41-a6c852c18f90",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ad0f7b6eba7eaec09ff57d1969dff3e2095c6468d918b824197c0346bf92a7a5"
+  },
+  "id": "bzjKDFWPHNXXYCx1",
+  "tags": []
+}
